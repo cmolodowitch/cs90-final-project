@@ -2,7 +2,6 @@ package org.molodowitch.cs90.todos.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import org.molodowitch.cs90.todos.BaseEntity;
 
 import java.util.List;
 import java.util.Objects;

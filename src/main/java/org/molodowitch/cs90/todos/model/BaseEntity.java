@@ -1,4 +1,4 @@
-package org.molodowitch.cs90.todos;
+package org.molodowitch.cs90.todos.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
