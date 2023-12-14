@@ -36,6 +36,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <exclusions>
+                <!-- Exclude Tomcat so the Lambda function doesn't try to start it up -->
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-tomcat</artifactId>
@@ -206,7 +207,7 @@
                         </configuration>
                         <executions>
                             <execution>
-                                <!-- Added execution id to fix issue with transformer per issue on previous version
+                                <!-- Added execution id to fix error with transformer per issue on previous version
                                      of transformer -->
                                 <!-- https://github.com/edwgiz-zz/maven-shaded-log4j-transformer/issues/6 -->
                                 <id>shade-jar</id>
