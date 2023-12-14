@@ -45,7 +45,7 @@ public class TodoController {
     }
 
     @PostMapping(path = "/lists")
-    public TodoList createNewList(TodoList list) {
+    public TodoList createNewList(@RequestBody TodoList list) {
         return todoService.saveList(list);
     }
 
@@ -59,11 +59,11 @@ public class TodoController {
         return todoService.editItem(item);
     }
 
-    @DeleteMapping(path = "/items/{id}")
-    public ResponseEntity<String> deleteItem(@PathVariable("id") long itemId) {
+    @DeleteMapping(path = "/items/{itemId}")
+    public ResponseEntity<String> deleteItem(@PathVariable("itemId") long itemId) {
         var exists = todoService.deleteItem(itemId);
         if (exists) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.noContent().build();
         }
         else {
             String message = "Todo item " + itemId + " not found";
