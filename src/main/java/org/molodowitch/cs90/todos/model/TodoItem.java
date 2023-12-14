@@ -26,8 +26,8 @@ public class TodoItem extends BaseEntity {
     /**
      * Text of the to-do item.
      */
-    @Column(name = "item", nullable = false, length = 1024)
-    private String item;
+    @Column(name = "task", nullable = false, length = 1024)
+    private String task;
 
     /**
      * Flag indicating whether the item has been completed or not.
@@ -43,12 +43,12 @@ public class TodoItem extends BaseEntity {
         this.list = list;
     }
 
-    public String getItem() {
-        return item;
+    public String getTask() {
+        return task;
     }
 
-    public void setItem(String item) {
-        this.item = item;
+    public void setTask(String item) {
+        this.task = item;
     }
 
     public boolean isCompleted() {
@@ -64,11 +64,11 @@ public class TodoItem extends BaseEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TodoItem todoItem = (TodoItem) o;
-        return Objects.equals(list, todoItem.list) && Objects.equals(item, todoItem.item);
+        return Objects.equals(list, todoItem.list) && Objects.equals(task, todoItem.task);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(list, item);
+        return Objects.hash(list, task);
     }
 }
