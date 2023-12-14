@@ -1,12 +1,20 @@
 package org.molodowitch.cs90.todos.services;
 
-import org.molodowitch.cs90.todos.model.TodoItem;
 import org.molodowitch.cs90.todos.model.TodoList;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface TodoService {
+
+    /**
+     * Checks if there's a saved to-do list with the specified persistence index.
+     *
+     * @param listId persistence index for a to-do list
+     * @return true if there's a saved to-do list with the specified persistence index,
+     *         false if not
+     */
+    boolean doesListExist(long listId);
 
     /**
      * Retrieves all saved to-do lists with their items.
@@ -23,7 +31,7 @@ public interface TodoService {
      * @return Optional containing the to-do list with the specified persistence index,
      *         or an empty Optional if there is no such entry
      */
-    Optional<TodoList> getList(Long listId);
+    Optional<TodoList> getList(long listId);
 
     /**
      * Saves the specified to-do list, returning the saved entity.
@@ -34,12 +42,13 @@ public interface TodoService {
     TodoList saveList(TodoList list);
 
     /**
-     * Saves the changes to the specified to-do item, returning the saved entity.
+     * Checks if there's a saved to-do item with the specified persistence index.
      *
-     * @param item TodoItem containing changes to be made.
-     * @return saved TodoItem entity
+     * @param itemId persistence index for a to-do item
+     * @return true if there's a saved to-do item with the specified persistence index,
+     *         false if not
      */
-    TodoItem editItem(TodoItem item);
+    boolean doesItemExist(long itemId);
 
     /**
      * Deletes the to-do item with the specified persistence index.
@@ -49,5 +58,5 @@ public interface TodoService {
      * @return true if a to-do item was deleted, false if there's no item with the
      *         specified persistence index
      */
-    boolean deleteItem(Long itemId);
+    void deleteItem(Long itemId);
 }
