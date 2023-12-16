@@ -5,7 +5,6 @@ import com.amazonaws.serverless.exceptions.ContainerInitializationException;
 import com.amazonaws.serverless.proxy.model.AwsProxyRequest;
 import com.amazonaws.serverless.proxy.model.AwsProxyResponse;
 import com.amazonaws.serverless.proxy.spring.SpringBootLambdaContainerHandler;
-import com.amazonaws.serverless.proxy.spring.SpringBootProxyHandlerBuilder;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import org.slf4j.Logger;
@@ -25,13 +24,14 @@ public class StreamLambdaHandler implements RequestStreamHandler {
     private static SpringBootLambdaContainerHandler<AwsProxyRequest, AwsProxyResponse> handler;
     static {
         try {
-//            handler = SpringBootLambdaContainerHandler.getAwsProxyHandler(Application.class);
+            // If using SnapStart, do NOT use async builder, this makes it even slower!
+            handler = SpringBootLambdaContainerHandler.getAwsProxyHandler(Application.class);
             // For applications that take longer than 10 seconds to start, use the async builder:
-             handler = new SpringBootProxyHandlerBuilder<AwsProxyRequest>()
-                                .defaultProxy()
-                                .asyncInit()
-                                .springBootApplication(Application.class)
-                                .buildAndInitialize();
+//             handler = new SpringBootProxyHandlerBuilder<AwsProxyRequest>()
+//                                .defaultProxy()
+//                                .asyncInit()
+//                                .springBootApplication(Application.class)
+//                                .buildAndInitialize();
         } catch (ContainerInitializationException e) {
             LOG.error("Error initializing Lambda handler", e);
             // if we fail here. We re-throw the exception to force another cold start
