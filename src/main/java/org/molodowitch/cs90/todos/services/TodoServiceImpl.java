@@ -2,7 +2,6 @@ package org.molodowitch.cs90.todos.services;
 
 import org.molodowitch.cs90.todos.model.BaseEntity;
 import org.molodowitch.cs90.todos.model.TodoList;
-import org.molodowitch.cs90.todos.repositories.TodoItemRepository;
 import org.molodowitch.cs90.todos.repositories.TodoListRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,12 +17,10 @@ public class TodoServiceImpl implements TodoService {
     private static final Logger LOG = LoggerFactory.getLogger(TodoServiceImpl.class);
 
     private final TodoListRepository listRepository;
-    private final TodoItemRepository itemRepository;
 
     @Autowired
-    public TodoServiceImpl(TodoListRepository listRepository, TodoItemRepository itemRepository) {
+    public TodoServiceImpl(TodoListRepository listRepository) {
         this.listRepository = listRepository;
-        this.itemRepository = itemRepository;
     }
 
     @Override
@@ -56,15 +53,4 @@ public class TodoServiceImpl implements TodoService {
         listRepository.deleteById(listId);
     }
 
-    @Override
-    public boolean doesItemExist(long itemId) {
-        LOG.debug("Checking if item {} exists", itemId);
-        return itemRepository.existsById(itemId);
-    }
-
-    @Override
-    public void deleteItem(long itemId) {
-        LOG.info("Deleting to-do item {}", itemId);
-        itemRepository.deleteById(itemId);
-    }
 }

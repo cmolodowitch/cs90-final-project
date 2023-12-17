@@ -49,23 +49,4 @@ public interface TodoService {
      * @param listId persistence index of the to-do list to delete
      */
     void deleteList(long listId);
-
-    /**
-     * Checks if there's a saved to-do item with the specified persistence index.
-     *
-     * @param itemId persistence index for a to-do item
-     * @return true if there's a saved to-do item with the specified persistence index,
-     *         false if not
-     */
-    boolean doesItemExist(long itemId);
-
-    /**
-     * Deletes the to-do item with the specified persistence index.
-     * Does nothing if there's no such entry.
-     *
-     * @param itemId persistence index of the to-do item to delete
-     * @return true if a to-do item was deleted, false if there's no item with the
-     *         specified persistence index
-     */
-    void deleteItem(long itemId);
 }
