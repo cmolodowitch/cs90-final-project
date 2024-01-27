@@ -10,7 +10,7 @@ CREATE TABLE todo_list (
 CREATE TABLE todo_item (
     todo_item_id BIGINT NOT NULL AUTO_INCREMENT,
     todo_list_id BIGINT NOT NULL,
-    item NVARCHAR(1024) NOT NULL,
+    task NVARCHAR(1024) NOT NULL,
     completed BOOLEAN NOT NULL DEFAULT 0,
     CONSTRAINT PK_todo_item PRIMARY KEY (todo_item_id),
     CONSTRAINT FK_todo_item_todo_list_id
