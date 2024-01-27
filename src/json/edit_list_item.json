@@ -1,0 +1,11 @@
+{
+  "id": 1,
+  "name": "First list",
+  "items": [
+    {
+      "id": 2,
+      "task": "Modify this task",
+      "completed": true
+    }
+  ]
+}
