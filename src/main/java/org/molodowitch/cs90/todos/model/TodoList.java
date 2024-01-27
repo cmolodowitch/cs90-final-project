@@ -3,6 +3,7 @@ package org.molodowitch.cs90.todos.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,8 +42,19 @@ public class TodoList extends BaseEntity {
         return items;
     }
 
+    public void addItem(TodoItem item) {
+        if (this.items == null) {
+            this.items = new ArrayList<>();
+        }
+        this.items.add(item);
+        item.setList(this);
+    }
+
     public void setItems(List<TodoItem> items) {
         this.items = items;
+        if (this.items != null) {
+            this.items.forEach(item -> item.setList(this));
+        }
     }
 
     @Override
