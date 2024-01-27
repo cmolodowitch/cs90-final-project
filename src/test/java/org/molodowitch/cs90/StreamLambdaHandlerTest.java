@@ -6,21 +6,21 @@ import com.amazonaws.serverless.proxy.internal.testutils.AwsProxyRequestBuilder;
 import com.amazonaws.serverless.proxy.internal.testutils.MockLambdaContext;
 import com.amazonaws.serverless.proxy.model.AwsProxyResponse;
 import com.amazonaws.services.lambda.runtime.Context;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
 import jakarta.ws.rs.HttpMethod;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.molodowitch.cs90.todos.StreamLambdaHandler;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class StreamLambdaHandlerTest {
 
@@ -43,16 +43,43 @@ public class StreamLambdaHandlerTest {
         handle(requestStream, responseStream);
 
         AwsProxyResponse response = readResponse(responseStream);
-        assertNotNull(response);
-        assertEquals(Response.Status.OK.getStatusCode(), response.getStatusCode());
+        assertThat(response, is(notNullValue()));
+        checkOkResponse(response);
+        checkJsonResponseType(response);
 
-        assertFalse(response.isBase64Encoded());
+        assertThat(response.getBody(), containsString("pong"));
+        assertThat(response.getBody(), containsString("Hello, World!"));
+    }
 
-        assertTrue(response.getBody().contains("pong"));
-        assertTrue(response.getBody().contains("Hello, World!"));
+    @Test
+    public void getSingleList_exists() {
+        InputStream requestStream = new AwsProxyRequestBuilder("/lists/2", HttpMethod.GET)
+                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
+                .buildStream();
+        ByteArrayOutputStream responseStream = new ByteArrayOutputStream();
 
-        assertTrue(response.getMultiValueHeaders().containsKey(HttpHeaders.CONTENT_TYPE));
-        assertTrue(response.getMultiValueHeaders().getFirst(HttpHeaders.CONTENT_TYPE).startsWith(MediaType.APPLICATION_JSON));
+        handle(requestStream, responseStream);
+
+        AwsProxyResponse response = readResponse(responseStream);
+        assertThat(response, is(notNullValue()));
+        checkOkResponse(response);
+        checkJsonResponseType(response);
+
+        assertThat(response.getBody(), is("{\"id\":2,\"name\":\"Second list\",\"items\":[]}"));
+    }
+
+    @Test
+    public void getSingleList_doesNotExist() {
+        InputStream requestStream = new AwsProxyRequestBuilder("/lists/100100", HttpMethod.GET)
+                .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
+                .buildStream();
+        ByteArrayOutputStream responseStream = new ByteArrayOutputStream();
+
+        handle(requestStream, responseStream);
+
+        AwsProxyResponse response = readResponse(responseStream);
+        assertThat(response, is(notNullValue()));
+        checkNotFoundResponse(response);
     }
 
     @Test
@@ -65,8 +92,8 @@ public class StreamLambdaHandlerTest {
         handle(requestStream, responseStream);
 
         AwsProxyResponse response = readResponse(responseStream);
-        assertNotNull(response);
-        assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatusCode());
+        assertThat(response, is(notNullValue()));
+        checkNotFoundResponse(response);
     }
 
     private void handle(InputStream is, ByteArrayOutputStream os) {
@@ -86,5 +113,21 @@ public class StreamLambdaHandlerTest {
             fail("Error while parsing response: " + e.getMessage());
         }
         return null;
+    }
+
+    private void checkOkResponse(AwsProxyResponse response) {
+        assertThat(response.getStatusCode(), is(Response.Status.OK.getStatusCode()));
+
+        assertThat(response.isBase64Encoded(), is(false));
+    }
+
+    private void checkJsonResponseType(AwsProxyResponse response) {
+        assertThat(response.getMultiValueHeaders(), hasKey(HttpHeaders.CONTENT_TYPE));
+        assertThat(response.getMultiValueHeaders().getFirst(HttpHeaders.CONTENT_TYPE),
+                           startsWith(MediaType.APPLICATION_JSON));
+    }
+
+    private void checkNotFoundResponse(AwsProxyResponse response) {
+        assertThat(response.getStatusCode(), is(Response.Status.NOT_FOUND.getStatusCode()));
     }
 }
