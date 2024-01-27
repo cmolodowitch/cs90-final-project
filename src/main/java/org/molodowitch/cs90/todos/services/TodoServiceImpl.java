@@ -1,7 +1,6 @@
 package org.molodowitch.cs90.todos.services;
 
 import org.molodowitch.cs90.todos.model.BaseEntity;
-import org.molodowitch.cs90.todos.model.TodoItem;
 import org.molodowitch.cs90.todos.model.TodoList;
 import org.molodowitch.cs90.todos.repositories.TodoItemRepository;
 import org.molodowitch.cs90.todos.repositories.TodoListRepository;
@@ -28,13 +27,19 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
+    public boolean doesListExist(long listId) {
+        LOG.debug("Checking if list {} exists", listId);
+        return listRepository.existsById(listId);
+    }
+
+    @Override
     public List<TodoList> getAllLists() {
         LOG.debug("Retrieving all to-do lists");
         return BaseEntity.convertIterableToList(listRepository.findAll());
     }
 
     @Override
-    public Optional<TodoList> getList(Long listId) {
+    public Optional<TodoList> getList(long listId) {
         LOG.debug("Retrieving to-do list {}", listId);
         return listRepository.findById(listId);
     }
@@ -46,22 +51,14 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public TodoItem editItem(TodoItem item) {
-        LOG.debug("Updating to-do item {}", item.getId());
-        return itemRepository.save(item);
+    public boolean doesItemExist(long itemId) {
+        LOG.debug("Checking if item {} exists", itemId);
+        return itemRepository.existsById(itemId);
     }
 
     @Override
-    public boolean deleteItem(Long itemId) {
+    public void deleteItem(Long itemId) {
         LOG.info("Deleting to-do item {}", itemId);
-        if (itemRepository.existsById(itemId)) {
-            LOG.debug("To-do item {} exists", itemId);
-            itemRepository.deleteById(itemId);
-            return true;
-        }
-        else {
-            LOG.warn("Attempted to delete non-existent to-do item {}", itemId);
-            return false;
-        }
+        itemRepository.deleteById(itemId);
     }
 }
