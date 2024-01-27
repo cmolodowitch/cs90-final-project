@@ -1,7 +1,7 @@
 package org.molodowitch.cs90.todos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.springframework.data.annotation.Id;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,6 +13,7 @@ import java.util.List;
  *
  * @author cm112
  */
+@SuppressWarnings("unused")
 @MappedSuperclass
 public abstract class BaseEntity implements Serializable {
 
@@ -29,6 +30,8 @@ public abstract class BaseEntity implements Serializable {
         this.id = id;
     }
 
+    @Transient
+    @JsonIgnore
     public boolean isSaved() {
         return id != null;
     }
