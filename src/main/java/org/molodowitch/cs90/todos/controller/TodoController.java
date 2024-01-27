@@ -123,24 +123,4 @@ public class TodoController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, message);
         }
     }
-
-    /**
-     * Deletes the specified to-do item.
-     *
-     * @param itemId persistence index of the to-do item to delete
-     * @return 204 No Content response if item is successfully deleted,
-     *         or 404 Not Found if there's no to-do item with the specified itemId
-     */
-    @DeleteMapping(path = "/lists/{listId}/items/{itemId}")
-    public ResponseEntity<String> deleteItem(@PathVariable("itemId") long itemId) {
-        if (todoService.doesItemExist(itemId)) {
-            todoService.deleteItem(itemId);
-            return ResponseEntity.noContent().build();
-        }
-        else {
-            String message = "Couldn't delete to-do item " + itemId + ", item not found";
-            LOG.error(message);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, message);
-        }
-    }
 }
