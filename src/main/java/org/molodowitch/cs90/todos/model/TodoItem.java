@@ -6,20 +6,34 @@ import org.molodowitch.cs90.todos.BaseEntity;
 
 import java.util.Objects;
 
+/**
+ * Holds a single "to-do" item in a list.
+ * Includes both the text of the item and the current completion status of the item.
+ */
+@SuppressWarnings("unused")
 @Entity
-@Table(name = "TodoItem")
-@AttributeOverride(name = "id", column = @Column(name = "TodoItemId"))
+@Table(name = "todo_item")
+@AttributeOverride(name = "id", column = @Column(name = "todo_item_id"))
 public class TodoItem extends BaseEntity {
 
+    /**
+     * Parent list containing this to-do item.
+     */
     @JsonBackReference("items")
     @ManyToOne(optional = false)
-    @JoinColumn(name = "TodoListId", nullable = false)
+    @JoinColumn(name = "todo_list_id", nullable = false)
     private TodoList list;
 
-    @Column(name = "Item", nullable = false, length = 1024)
+    /**
+     * Text of the to-do item.
+     */
+    @Column(name = "item", nullable = false, length = 1024)
     private String item;
 
-    @Column(name = "Completed", nullable = false)
+    /**
+     * Flag indicating whether the item has been completed or not.
+     */
+    @Column(name = "completed", nullable = false)
     private boolean completed;
 
     public TodoList getList() {

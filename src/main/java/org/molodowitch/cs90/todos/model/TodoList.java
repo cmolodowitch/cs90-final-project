@@ -7,16 +7,27 @@ import org.molodowitch.cs90.todos.BaseEntity;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Holds a "to-do" list containing one or more items.
+ * Each list is identified by a unique name.
+ */
+@SuppressWarnings("unused")
 @Entity
-@Table(name = "TodoList")
-@AttributeOverride(name = "id", column = @Column(name = "TodoListId"))
+@Table(name = "todo_list")
+@AttributeOverride(name = "id", column = @Column(name = "todo_list_id"))
 public class TodoList extends BaseEntity {
 
-    @Column(name = "Name")
+    /**
+     * Name of the to-do list, must be unique.
+     */
+    @Column(name = "name")
     private String name;
 
+    /**
+     * Items on the to-do list.
+     */
     @JsonManagedReference("items")
-    @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "list", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TodoItem> items;
 
     public String getName() {
