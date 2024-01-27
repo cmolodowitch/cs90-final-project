@@ -51,13 +51,19 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
+    public void deleteList(long listId) {
+        LOG.info("Deleting to-do list {}", listId);
+        listRepository.deleteById(listId);
+    }
+
+    @Override
     public boolean doesItemExist(long itemId) {
         LOG.debug("Checking if item {} exists", itemId);
         return itemRepository.existsById(itemId);
     }
 
     @Override
-    public void deleteItem(Long itemId) {
+    public void deleteItem(long itemId) {
         LOG.info("Deleting to-do item {}", itemId);
         itemRepository.deleteById(itemId);
     }
