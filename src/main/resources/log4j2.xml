@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Configuration copied from https://github.com/aws/aws-lambda-java-libs/tree/main/aws-lambda-java-log4j2 -->
+<Configuration>
+    <Appenders>
+        <!-- Set format to "TEXT" to use text format, or "JSON" to use JSON format -->
+        <Lambda name="Lambda" format="${env:AWS_LAMBDA_LOG_FORMAT:-JSON}">
+            <LambdaTextFormat>
+                <PatternLayout>
+                    <pattern>%d{yyyy-MM-dd HH:mm:ss} %X{AWSRequestId} %-5p %c{1}:%L - %m%n</pattern>
+                </PatternLayout>
+            </LambdaTextFormat>
+            <LambdaJSONFormat>
+                <JsonTemplateLayout eventTemplateUri="classpath:LambdaLayout.json" />
+            </LambdaJSONFormat>
+        </Lambda>
+    </Appenders>
+    <Loggers>
+        <Root level="${env:AWS_LAMBDA_LOG_LEVEL:-INFO}">
+            <AppenderRef ref="Lambda" />
+        </Root>
+    </Loggers>
+</Configuration>
