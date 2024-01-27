@@ -103,6 +103,26 @@ public class TodoController {
     }
 
     /**
+     * Deletes the specified to-do list, along with any items on the list.
+     *
+     * @param listId persistence index of the to-do list to delete
+     * @return 204 No Content response if list is successfully deleted,
+     *         or 404 Not Found if there's no to-do list with the specified listId
+     */
+    @DeleteMapping(path = "/lists/{listId}")
+    public ResponseEntity<String> deleteList(@PathVariable("listId") long listId) {
+        if (todoService.doesListExist(listId)) {
+            todoService.deleteList(listId);
+            return ResponseEntity.noContent().build();
+        }
+        else {
+            String message = "Couldn't delete to-do list " + listId + ", list not found";
+            LOG.error(message);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, message);
+        }
+    }
+
+    /**
      * Deletes the specified to-do item.
      *
      * @param itemId persistence index of the to-do item to delete
