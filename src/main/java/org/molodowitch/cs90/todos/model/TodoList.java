@@ -25,9 +25,12 @@ public class TodoList extends BaseEntity {
 
     /**
      * Items on the to-do list.
+     * Make fetch eager for this demo app to simplify.
+     * For true production use it should be lazy-loaded, with JOIN FETCH specified as needed
+     * in custom repository methods.
      */
     @JsonManagedReference("items")
-    @OneToMany(mappedBy = "list", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "list", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<TodoItem> items;
 
     public String getName() {
